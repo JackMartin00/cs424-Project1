@@ -13,7 +13,7 @@ library(tidyverse)
 library(lubridate)
 # install.packages("DT")
 library(DT)
-setwd("D:/R data 424/Project 1")
+# setwd("D:/R data 424/Project 1")
 #------------------------------------
 #reading in data for halsted
 Halsted <- read.table(file = "./Halsted Stop.tsv", sep = "\t", header = TRUE)
@@ -30,10 +30,17 @@ years <- c(2001:2021)
 # Define UI for application that draws a histogram
 ui <- dashboardPage(
     # Application title
-    dashboardHeader(title = "CS 424 Spring 2022 Jack Martin Project 1"),
+    dashboardHeader(title = "Jack Martin Project 1"),
     dashboardSidebar(disable = FALSE, collapsed = FALSE,
       sidebarMenu(
         id = "tabs",
+        menuItem("", tabName = "cheapBlankSpace", icon = NULL),
+        menuItem("", tabName = "cheapBlankSpace", icon = NULL),
+        menuItem("", tabName = "cheapBlankSpace", icon = NULL),
+        menuItem("", tabName = "cheapBlankSpace", icon = NULL),
+        menuItem("", tabName = "cheapBlankSpace", icon = NULL),
+        menuItem("", tabName = "cheapBlankSpace", icon = NULL),
+        menuItem("", tabName = "cheapBlankSpace", icon = NULL),
         selectInput("Year", "Select the year to visualize", years, selected = 2021),
         menuItem("Entries every Year", tabName = "allYears"),
         menuItem("Detailed View", tabName = "detailed" ),#empty for now
@@ -82,12 +89,13 @@ ui <- dashboardPage(
                     box(title = "About", solidHeader = TRUE, status = "primary", width = 12,
                         
                         
-                        h2("This data is from the Chicago Data Portal. More specifically, the \'CTA - Ridership - L Station Entries - Daily total\'.
-                           \nJack Martin created this app for Project 1 of UIC's CS 424 - Visual Analytics.\n
+                        h2("Jack Martin created this app for Project 1 of UIC's CS 424 - Visual Analytics."),
+                        p("This data is from the Chicago Data Portal. More specifically, the \'CTA - Ridership - L Station Entries - Daily total\'.
                            The main components on why we are given this project is to teach us and give better familiarity with\n 
-                           both the R language and Shiny and Shiny dashboard. We were tasked with analyzing and plotting Entries over\n
-                           specific stations over 2001-2021 and over each Day of the Week and Month.")
+                          both the R language and Shiny and Shiny dashboard. We were tasked with analyzing and plotting Entries over\n
+                          specific stations over 2001-2021 and over each Day of the Week and Month.")
                         )
+                      
           )
         )
         )
@@ -97,7 +105,8 @@ ui <- dashboardPage(
 server <- function(input, output) {
   
   output$entryYear <- renderPlot({
-    ggplot(Halsted, aes(year(newDate),rides))+
+    subset(Halsted,newDate > as.Date("2000-12-31")) %>%
+    ggplot( aes(year(newDate),rides))+
       geom_bar(stat="identity",fill="#88CCEE")+
       labs(x = "Years", y = "Number of Entries", title = "Entries per Year")+
       theme_bw()+
